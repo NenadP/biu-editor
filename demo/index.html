@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>jQuery Boilerplate</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+		<script src="../dist/jquery.boilerplate.js"></script>
+	</head>
+	<body>
+
+	<form name="biuForm" id="biuForm">
+	<textarea class="biu-editor"></textarea>
+		<input type="submit" />
+	</form>
+
+		<script>
+			$(function() {
+			var biuEditor = $("textarea").biuEditor({
+					width: 700,
+					height: 400
+				}).data("plugin_biu-editor");
+
+				$('#biuForm').on('submit', function(event){
+					event.preventDefault();
+					console.log(biuEditor.getHtml());
+				});
+			});
+		</script>
+
+	</body>
+</html>
