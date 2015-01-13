@@ -21,11 +21,12 @@
 
 	// Create the defaults once
 	var pluginName = "biuEditor",
-		defaults = {
-			width: 500,
-			height: 200,
-			placeholderText: null
-		};
+			defaults = {
+				width: 500,
+				height: 200,
+				placeholderText: null,
+				updateCallback: null
+			};
 
 	// The actual plugin constructor
 	function Plugin ( element, options ) {
@@ -50,7 +51,7 @@
 			// call them like so: this.yourOtherFunction(this.element, this.options).
 
 
-			var element, containerDiv, that, editor, buttonPane, buttonBold, buttonItalic, buttonUnderline, placeholderText;
+			var element, containerDiv, that, editor, buttonPane, buttonBold, buttonItalic, buttonUnderline, placeholderText, updateCallback;
 
 			that = this;
 			element = $(this.element);
@@ -109,6 +110,10 @@
 				placeholderText = "Entry Text";
 			}
 
+			if (that.options.updateCallback !== null) {
+				updateCallback = that.options.updateCallback;
+			}
+
 			function initEditor() {
 
 				var iframeEditable;
@@ -131,13 +136,16 @@
 
 				$(iframeEditable).on("keypress click keyup", function(){
 					element.val(iframeEditable.body.innerHTML);
+
+					updateCallback();
 				});
 
 				$(iframeEditable).on("paste", function(event){
 					// prevent pasting rich html content and paste retrieved plain text instead
 					event.preventDefault();
 					editor.contentWindow.document.execCommand("inserttext", false, event.originalEvent.clipboardData.getData("Text"));
-					console.log(event.originalEvent.clipboardData.getData("Text"));
+
+					updateCallback();
 				});
 
 				$(iframeEditable).on("drop", function(event){
@@ -153,6 +161,8 @@
 				contentWindow.focus();
 
 				element.val(editor.contentWindow.document.body.innerHTML);
+
+				updateCallback();
 
 				return false;
 			}
