@@ -23,7 +23,8 @@
 	var pluginName = "biuEditor",
 		defaults = {
 			width: 500,
-			height: 200
+			height: 200,
+			placeholderText: null
 		};
 
 	// The actual plugin constructor
@@ -49,7 +50,7 @@
 			// call them like so: this.yourOtherFunction(this.element, this.options).
 
 
-			var element, containerDiv, that, editor, buttonPane, buttonBold, buttonItalic, buttonUnderline;
+			var element, containerDiv, that, editor, buttonPane, buttonBold, buttonItalic, buttonUnderline, placeholderText;
 
 			that = this;
 			element = $(this.element);
@@ -102,6 +103,12 @@
 				click : execCommand
 			})).appendTo(buttonPane);
 
+			if (this.options.placeholderText !== null) {
+				placeholderText = this.options.placeholderText;
+			} else {
+				placeholderText = "Entry Text";
+			}
+
 			function initEditor() {
 
 				var iframeEditable;
@@ -115,6 +122,12 @@
 				iframeEditable.designMode = "on";
 
 				that.iframeEditable = iframeEditable;
+
+				$(that.iframeEditable).find("head")
+						.append("<style type=\"text/css\">" +
+						"body:empty:before {content: \""+ placeholderText + "\";color: #797F87;}\n" +
+						"body {font-family: \"helvetica\"; font-size: \"18px\"; overflow-x: \"hidden\"}" +
+						"</style>");
 
 				$(iframeEditable).on("keypress click keyup", function(){
 					element.val(iframeEditable.body.innerHTML);
