@@ -7,24 +7,31 @@
 	</head>
 	<body>
 
+	<button type="button" class="insert-html">Insert some HTML</button>
+
 	<form name="biuForm" id="biuForm">
 	<textarea class="biu-editor"></textarea>
 		<input type="submit" />
 	</form>
 
-		<script>
-			$(function() {
+	<script>
+		$(function() {
 			var biuEditor = $("textarea").biuEditor({
-					width: 700,
-					height: 400
-				}).data("plugin_biu-editor");
+				width: 700,
+				height: 400
+			}).data("plugin_biu-editor");
 
-				$('#biuForm').on('submit', function(event){
-					event.preventDefault();
-					console.log(biuEditor.getHtml());
-				});
+			$('#biuForm').on('submit', function(event){
+				event.preventDefault();
+				console.log(biuEditor.getHtmlFromEditor());
 			});
-		</script>
+
+			$(".insert-html").on("click", function() {
+				biuEditor.insertHtmlInEditor("Fancy <strong>HTML</strong> is <i>here</i>!");
+			});
+
+		});
+	</script>
 
 	</body>
 </html>

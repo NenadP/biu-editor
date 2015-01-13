@@ -48,8 +48,10 @@
 			// you can add more functions like the one below and
 			// call them like so: this.yourOtherFunction(this.element, this.options).
 
-			var element, containerDiv, editor, buttonPane, buttonBold, buttonItalic, buttonUnderline;
 
+			var element, containerDiv, that, editor, buttonPane, buttonBold, buttonItalic, buttonUnderline;
+
+			that = this;
 			element = $(this.element);
 
 			// create a container div on the fly
@@ -69,36 +71,36 @@
 			}).appendTo(containerDiv).get(0);
 
 			//buttons
-			buttonPane = $("<div/>",{
+			buttonPane = $("<ul/>",{
 				"class" : "biu-editor-buttons"
 			}).prependTo(containerDiv);
 
-			buttonBold = $("<button />", {
+			buttonBold = $("<li />").append($("<button />", {
 				text : "Bold",
 				type: "button",
 				data : {
 					commandName : "bold"
 				},
 				click : execCommand
-			}).appendTo(buttonPane);
+			})).appendTo(buttonPane);
 
-			buttonItalic = $("<button />", {
+			buttonItalic = $("<li />").append($("<button />", {
 				text : "Italic",
 				type: "button",
 				data : {
 					commandName : "italic"
 				},
 				click : execCommand
-			}).appendTo(buttonPane);
+			})).appendTo(buttonPane);
 
-			buttonUnderline = $("<button />", {
+			buttonUnderline = $("<li />").append($("<button />", {
 				text : "Underline",
 				type: "button",
 				data : {
 					commandName : "underline"
 				},
 				click : execCommand
-			}).appendTo(buttonPane);
+			})).appendTo(buttonPane);
 
 			function initEditor() {
 
@@ -111,6 +113,8 @@
 				iframeEditable.open();
 				iframeEditable.close();
 				iframeEditable.designMode = "on";
+
+				that.iframeEditable = iframeEditable;
 
 				$(iframeEditable).on("keypress click keyup", function(){
 					element.val(iframeEditable.body.innerHTML);
@@ -142,8 +146,11 @@
 
 			initEditor();
 		},
-		getHtml: function() {
+		getHtmlFromEditor: function() {
 			return($(this.element).val());
+		},
+		insertHtmlInEditor: function(html) {
+			$(this.iframeEditable).find("body").html(html);
 		}
 	};
 
