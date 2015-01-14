@@ -51,7 +51,7 @@
 			// call them like so: this.yourOtherFunction(this.element, this.options).
 
 
-			var element, containerDiv, that, editor, buttonPane, buttonBold, buttonItalic, buttonUnderline, placeholderText, updateCallback;
+			var element, containerDiv, that, editor, buttonPane, buttonBold, buttonItalic, buttonUnderline, placeholderText;
 
 			that = this;
 			element = $(this.element);
@@ -110,10 +110,6 @@
 				placeholderText = "Entry Text";
 			}
 
-			if (that.options.updateCallback !== null) {
-				updateCallback = that.options.updateCallback;
-			}
-
 			function initEditor() {
 
 				var iframeEditable;
@@ -137,7 +133,10 @@
 				$(iframeEditable).on("keypress click keyup", function(){
 					element.val(iframeEditable.body.innerHTML);
 
-					updateCallback();
+					if (that.options.updateCallback !== null) {
+						that.options.updateCallback();
+					}
+
 				});
 
 				$(iframeEditable).on("paste", function(event){
@@ -145,7 +144,10 @@
 					event.preventDefault();
 					editor.contentWindow.document.execCommand("inserttext", false, event.originalEvent.clipboardData.getData("Text"));
 
-					updateCallback();
+					if (that.options.updateCallback !== null) {
+						that.options.updateCallback();
+					}
+
 				});
 
 				$(iframeEditable).on("drop", function(event){
@@ -162,7 +164,9 @@
 
 				element.val(editor.contentWindow.document.body.innerHTML);
 
-				updateCallback();
+				if (that.options.updateCallback !== null) {
+					that.options.updateCallback();
+				}
 
 				return false;
 			}
